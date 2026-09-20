@@ -1,72 +1,119 @@
 # mini-agent-MCub
 
-Mini-agent prototype inspired by the "Kub" concept: a personal/local AI agent with a small memory, a local knowledge base (RAG), language detection, and modular expansion.
+Модульний прототип AI-агента, який досліджує базову архітектуру агента: пам'ять, локальні знання, планування, розпізнавання мови, страхувальні обмеження та інтерфейс для взаємодії.
 
-This project is intentionally lightweight and beginner-friendly. It is not a full production LLM stack yet, but it is a solid starting point for experiments, demos, and Hugging Face Spaces.
+Це не продакшн-система, а навчальний і експериментальний проєкт. Основна мета — зрозуміти, як зібрати простий агент з окремих модулів і як зручно виводити його в живий UI.
 
-## What is inside
+## Що в проєкті
 
-- `config/` — DNA config and safety settings
-- `core/` — agent logic, memory, RAG, planner, safeguards, and language support
-- `data/knowledge/` — local text knowledge files used by the retrieval layer
-- `tests/` — basic functional tests
-- `scripts/` — quick local run scripts
+- `config/` — конфігурація агента та правила поведінки
+- `core/` — логіка агента: планування, пам'ять, RAG, мова, ініціатива, безпека
+- `data/knowledge/` — локальні знання для пошуку та контексту
+- `data/memory.json` — короткочасна/локальна пам'ять
+- `scripts/` — запуск демо та перевірок
+- `tests/` — базові тести
+- `app.py` — Gradio інтерфейс для Hugging Face Spaces
 
-## Local run
+## Поточні можливості
 
-Install dependencies:
+- завантаження конфігурації агенту
+- короткочасний контекст чату
+- пошук по локальних знаннях
+- збереження приміток у пам'яті
+- визначення мови (`uk`, `en`, `ko`)
+- базова логіка прийняття рішень
+- мінімальні страхувальні обмеження
+- простий Web UI для демонстрації
+
+## Підготовка до запуску
+
+### 1. Створення віртуального середовища
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
+```
+
+### 2. Встановлення залежностей
+
+```bash
 pip install -r requirements.txt
 ```
 
-Run the demo:
+### 3. Запуск локального демо
 
 ```bash
 python scripts/test_runner.py
 ```
 
-Run the tests:
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-## Hugging Face Space
-
-This project is already structured for a small Gradio app.
-
-Run the web app locally:
+### 4. Запуск Gradio UI
 
 ```bash
 python app.py
 ```
 
-On Hugging Face Spaces, upload the repository files and use a Python Space with:
+### 5. Запуск тестів
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+## Використання у Hugging Face Spaces
+
+Цей проєкт призначений для запуску як веб-додаток на Hugging Face Spaces.
+
+### Обов'язкові файли
 
 - `app.py`
 - `requirements.txt`
-- the existing `core/`, `config/`, `data/` folders
+- `config/`
+- `core/`
+- `data/`
+- `README.md`
 
-## Current capabilities
+### Секрет для Gemini API
 
-- reads a DNA config from `config/cube_dna.json`
-- keeps a short conversation context
-- searches local `.txt/.md/.json` knowledge files
-- stores small notes in a local memory JSON file
-- detects simple language (`uk`, `en`, `ko`)
-- can decide whether a message should be answered, retrieved, or remembered
-- has safety guardrails for basic rate limiting and context overflow
+Якщо ви підключаєте Gemini API, додайте секрет у налаштуваннях Hugging Face Space:
 
-## Notes
+- `GOOGLE_API_KEY`
 
-This is a learning project and a starter prototype. It is intentionally simple and modular so it can grow into a stronger agent over time.
+або
 
-It is totally okay to build this step by step. A lot of people start with a messy repo, then clean it up into a real project. You are learning, and this is a good foundation.
+- `GEMINI_API_KEY`
 
-## Project structure
+Далі проєкт може використовувати Gemini через `google-genai` SDK.
+
+## Технічний стек
+
+- Python
+- Gradio
+- Hugging Face Spaces
+- локальний RAG-пошук
+- JSON-пам'ять
+- Gemini API (необов'язково)
+
+## Чому цей проєкт важливий
+
+Це не фінальна продуктивна система. Це навчальний каркас, який допомагає зрозуміти:
+
+- як будуються агенти з розбиттям на модулі
+- як працює memory + context + retrieval
+- як можна швидко показати експеримент у веб-інтерфейсі
+- як виглядає структура проєкту, який можна розширювати далі
+
+## Важлива примітка
+
+Цей проєкт є експериментом і навчальним шляхом у створенні AI-агентів. Його мета — навчання, ітерації, побудова логіки та перевірка ідей, а не “готовий продукт” в комерційному сенсі.
+
+## Рекомендований порядок розвитку
+
+1. перевірити локальну логіку агента
+2. перевірити роботу RAG та memory
+3. підключити реальну модель через API
+4. підсилити планувальник та сценарії взаємодії
+5. покращити UI та докладніший experience flow
+
+## Структура проєкту
 
 ```text
 mini-agent-MCub/
@@ -75,7 +122,6 @@ mini-agent-MCub/
 ├── .gitignore
 ├── app.py
 ├── requirements.txt
-├── pyproject.toml
 ├── config/
 │   ├── cube_dna.json
 │   └── safeguards_config.json
@@ -88,7 +134,7 @@ mini-agent-MCub/
 │   ├── planner.py
 │   ├── rag.py
 │   ├── safeguards.py
-│   └── token_wallet.py
+│   └── llm.py
 ├── data/
 │   ├── knowledge/
 │   │   └── notes.txt
@@ -99,3 +145,11 @@ mini-agent-MCub/
 │   └── test_ai_mini.py
 └── .venv/
 ```
+
+## Розробка та експерименти
+
+Це чудове місце для навчання: ви можете розбивати логіку на модулі, додавати нові компоненти, пробувати різні моделі, міняти структуру пам'яті та експериментувати з поведінкою агента.
+
+---
+
+Цей проєкт — приклад того, як можна почати з простого прототипу і поступово витягати з нього більш складну систему.
