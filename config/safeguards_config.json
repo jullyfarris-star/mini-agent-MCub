@@ -1,0 +1,6 @@
+{
+  "max_context_size": 10,
+  "rate_limit_seconds": 0.2,
+  "max_errors_before_sleep": 3,
+  "sleep_duration_seconds": 30
+}

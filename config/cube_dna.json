@@ -1,0 +1,26 @@
+{
+  "cube_dna": {
+    "version": "0.1.0",
+    "name": "Куб",
+    "description": "Модульний локальний AI-mini"
+  },
+  "states": {
+    "npc": ["idle", "active", "learning", "sleep"],
+    "system": ["stable", "overloaded", "offline"]
+  },
+  "rules": {
+    "style": {
+      "response_mode": "concise",
+      "temperature": 0.6,
+      "max_context": 10
+    },
+    "behavior": {
+      "on_idle": "reduce_power",
+      "on_overload": "clear_temp_context"
+    }
+  },
+  "language": {
+    "supported": ["uk", "en", "ko"],
+    "default": "uk"
+  }
+}
